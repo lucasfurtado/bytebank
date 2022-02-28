@@ -18,7 +18,9 @@ class ByteBankApp extends StatelessWidget {
 }
 
 class FormularioTransferencia extends StatelessWidget {
-  const FormularioTransferencia({Key? key}) : super(key: key);
+  final TextEditingController _controladorCampoNumeroConta =
+      TextEditingController();
+  final TextEditingController _controladorCampoValor = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +33,7 @@ class FormularioTransferencia extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: TextField(
+              controller: _controladorCampoNumeroConta,
               style: TextStyle(fontSize: 24.0),
               decoration: InputDecoration(
                 labelText: 'Número da conta',
@@ -42,6 +45,7 @@ class FormularioTransferencia extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: TextField(
+              controller: _controladorCampoValor,
               style: TextStyle(fontSize: 24.0),
               decoration: InputDecoration(
                 icon: Icon(Icons.monetization_on),
@@ -52,7 +56,15 @@ class FormularioTransferencia extends StatelessWidget {
             ),
           ),
           ElevatedButton(
-            onPressed: () => null,
+            onPressed: () {
+              debugPrint('Clicou em confirmar');
+              final int? numeroConta = int.tryParse(_controladorCampoNumeroConta.text);
+              final double? valor = double.tryParse(_controladorCampoValor.text);
+              if(numeroConta != null && valor != null){
+                final transferenciaCriada = Transferencia(valor,numeroConta);
+                debugPrint('$transferenciaCriada');
+              }
+            },
             child: Text('Botão'),
           )
         ],
@@ -106,4 +118,9 @@ class Transferencia {
   final int numeroDaConta;
 
   Transferencia(this.valor, this.numeroDaConta);
+
+  @override
+  String toString() {
+    return 'Transferencia{valor: $valor, numeroDaConta: $numeroDaConta}';
+  }
 }
