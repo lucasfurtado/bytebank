@@ -90,22 +90,27 @@ class Editor extends StatelessWidget {
   }
 }
 
-class ListaTranferencia extends StatelessWidget {
+class ListaTranferencia extends StatefulWidget {
   final List<Transferencia> _transferencias = [];
 
   @override
+  State<StatefulWidget> createState() {
+    return ListaTranferenciasState();
+  }
+}
+
+class ListaTranferenciasState extends State<ListaTranferencia>{
+
+  @override
   Widget build(BuildContext context) {
-    _transferencias.add(Transferencia(100.0, 1000));
-    _transferencias.add(Transferencia(200.0, 2000));
-    _transferencias.add(Transferencia(300.0, 3000));
     return Scaffold(
       appBar: AppBar(
         title: Text('Tranferências'),
       ),
       body: ListView.builder(
-        itemCount: _transferencias.length,
+        itemCount: widget._transferencias.length,
         itemBuilder: (context, indice){
-          final transferencia = _transferencias[indice];
+          final transferencia = widget._transferencias[indice];
           return ItemTranferencia(transferencia);
         },
       ),
@@ -113,19 +118,24 @@ class ListaTranferencia extends StatelessWidget {
         child: Icon(Icons.add),
         onPressed: () {
           final Future<Transferencia?> future =
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
             return FormularioTransferencia();
           }));
           future.then( (tranferenciaRecebida) {
             debugPrint('Chegou no then do future');
             debugPrint(tranferenciaRecebida.toString());
-            _transferencias.add(tranferenciaRecebida!);
+            setState(() {
+              widget._transferencias.add(tranferenciaRecebida!);
+            });
           });
         },
       ),
     );
   }
 }
+
+
+
 
 class ItemTranferencia extends StatelessWidget {
   final Transferencia _tranferencia;
