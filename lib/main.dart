@@ -15,38 +15,18 @@ class ByteBankApp extends StatelessWidget {
   }
 }
 
-class FormularioTransferencia extends StatelessWidget {
-  final TextEditingController _controladorCampoNumeroConta =
-      TextEditingController();
-  final TextEditingController _controladorCampoValor = TextEditingController();
+class FormularioTransferencia extends StatefulWidget {
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Criando tranferencia'),
-      ),
-      body: Column(
-        children: [
-          Editor(
-            controlador: _controladorCampoNumeroConta,
-            dica: '0000',
-            rotulo: 'Número da Conta',
-          ),
-          Editor(
-            controlador: _controladorCampoValor,
-            dica: '000.00',
-            rotulo: 'Valor',
-            icone: Icons.monetization_on,
-          ),
-          ElevatedButton(
-            onPressed: () => _criaTransferencia(context),
-            child: Text('Botão'),
-          )
-        ],
-      ),
-    );
+  State<StatefulWidget> createState() {
+    return FormularioTransferenciaState();
   }
+}
+
+class FormularioTransferenciaState extends State<FormularioTransferencia>{
+  final TextEditingController _controladorCampoNumeroConta = TextEditingController();
+  final TextEditingController _controladorCampoValor = TextEditingController();
+
 
   void _criaTransferencia(BuildContext context) {
     final int? numeroConta = int.tryParse(_controladorCampoNumeroConta.text);
@@ -57,6 +37,36 @@ class FormularioTransferencia extends StatelessWidget {
       debugPrint(transferenciaCriada.toString());
       Navigator.pop(context, transferenciaCriada);
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Criando tranferencia'),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Editor(
+              controlador: _controladorCampoNumeroConta,
+              dica: '0000',
+              rotulo: 'Número da Conta',
+            ),
+            Editor(
+              controlador: _controladorCampoValor,
+              dica: '000.00',
+              rotulo: 'Valor',
+              icone: Icons.monetization_on,
+            ),
+            ElevatedButton(
+              onPressed: () => _criaTransferencia(context),
+              child: Text('Botão'),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
 
